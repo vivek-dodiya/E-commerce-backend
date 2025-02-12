@@ -11,11 +11,12 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true
     },
-    phone:{
-        type:String,
-        required:true,
-        select:false
+    phone: {
+        type: String,
+        required: true,
+        select: false
     },
     password: {
         type: String,
@@ -49,7 +50,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save",
-    async function (next)  {
+    async function (next) {
         if (!this.isModified('password')) {
             return next();
         }
@@ -58,8 +59,8 @@ userSchema.pre("save",
     }
 );
 
-userSchema.methods.comparePassword = async function () {
-    return await bcrypt.compare(this.password, password)
+userSchema.methods.comparePassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password)
 };
 
 userSchema.methods.generateVerificationCode = function () {
@@ -74,8 +75,8 @@ userSchema.methods.generateVerificationCode = function () {
 };
 
 
-userSchema.methods.generateToken = async () => {
-    return await jwt.sign({ id: this._id }, process.env.SECRET_KEY, { expiresIn: process.env.JWT_EXPIRE_IN })
+userSchema.methods.generateToken = async function ()  {
+    return await jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRE_IN })
 }
 
 export const User = mongoose.model("User", userSchema)

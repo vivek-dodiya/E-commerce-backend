@@ -31,15 +31,10 @@ export const userRegister = catchAsyncErrors(async (req, res, next) => {
                 {
                     phone,
                     accountVerified: true
-                }
+                },
             ]
         });
-        if (isUserExist) {
-            return next(new ErrorHandler(400, "User Already Exist"))
-        };
-
-        //  Registratin Attempts By User 
-        const registrationAttemptsByUser = await User.find({
+        const isUserExistAccountNotVerified = await User.findOne({
             $or: [
                 {
                     email,
@@ -48,13 +43,13 @@ export const userRegister = catchAsyncErrors(async (req, res, next) => {
                 {
                     phone,
                     accountVerified: false
-                }
+                },
             ]
         });
-        if (registrationAttemptsByUser.length > 2) {
-            return next(new ErrorHandler(400, 'You Have Exceeded The Maximum Number Of Attempts Try After an Hour'))
-        }
 
+        if (isUserExist || isUserExistAccountNotVerified) {
+            return next(new ErrorHandler(400, "User Already Exist"))
+        };
 
         //  creating user
         const user = await User.create({
@@ -67,6 +62,13 @@ export const userRegister = catchAsyncErrors(async (req, res, next) => {
         // save varification code
         const verificationCode = user.generateVerificationCode();
         await user.save();
+        const token = await user.generateToken();
+
+        // set token in Cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000)
+        });
 
         //  send verification code in email
         sendVerificationEmail(user, verificationCode);
