@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["owner", "user"],
+        enum: ["admin", "user"],
         default: "user"
     },
     accountVerified: {
@@ -44,7 +44,13 @@ const userSchema = new mongoose.Schema({
     },
     resetPasswordExpires: {
         type: Date
-    }
+    },
+    purchasedProduct:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        }
+    ]
 }, {
     timestamps: true
 });
@@ -58,6 +64,7 @@ userSchema.pre("save",
         next()
     }
 );
+
 
 userSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password)
