@@ -9,12 +9,17 @@ import { getByName } from '../controllers/productControllers/getByName.js';
 import { getByPriceGreaterThen, getByPriceLessThen } from '../controllers/productControllers/getByPrice.js';
 import { updateProduct } from '../controllers/productControllers/updateProduct.js';
 import { deleteProduct } from '../controllers/productControllers/deleteProduct.js';
+import { addToCart } from '../controllers/productControllers/addToCart.js';
+import { removeFromCart } from '../controllers/productControllers/removeFromCart.js';
 
 // only Admin Access This Routes
 productRoutes.post('/create-product', auth, onlyAdminAccess, createProduct);
 productRoutes.put('/update-product/:id', auth, onlyAdminAccess, updateProduct);
 productRoutes.delete('/delete-product/:id', auth, onlyAdminAccess, deleteProduct);
 
+//cart Routes
+productRoutes.post('/add-to-cart/:id', auth, addToCart);
+productRoutes.delete('/remove-from-cart/:id', auth, removeFromCart);
 
 productRoutes.get('/get-all-products', auth, getAllProducts);
 productRoutes.get('/get-by-category/:category', auth, getByCategory);
