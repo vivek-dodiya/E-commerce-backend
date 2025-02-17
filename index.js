@@ -12,6 +12,8 @@ const port = process.env.PORT || 4000;
 import { connection } from './config/dbConnection.js';
 import { userRoutes } from './routes/userRoutes.js';
 import { deleteUnverifiedAccounts } from './cronJob/deleteUserCronJob.js';
+import { productRoutes } from './routes/productRoutes.js';
+
 deleteUnverifiedAccounts()
 try {
     connection();
@@ -37,6 +39,7 @@ app.use(cors({
 
 // Routes 
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/product', productRoutes)
 
 app.use((err, req, res, next) => {
     res.status(err.statusCode).json({

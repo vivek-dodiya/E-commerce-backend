@@ -45,7 +45,19 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: {
         type: Date
     },
-    purchasedProduct:[
+    purchasedProduct: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        }
+    ],
+    createdProducts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        }
+    ],
+    cart: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
@@ -82,7 +94,7 @@ userSchema.methods.generateVerificationCode = function () {
 };
 
 
-userSchema.methods.generateToken = async function ()  {
+userSchema.methods.generateToken = async function () {
     return await jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRE_IN })
 }
 

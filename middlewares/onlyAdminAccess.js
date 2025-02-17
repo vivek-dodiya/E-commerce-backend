@@ -6,8 +6,8 @@ import { responseHandler } from "../utils/responseHandler.js";
 export const onlyAdminAccess = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id);
-        if (user.role !== "Admin" || user.role !== "admin") {
-            return next(new responseHandler(403, "Only Admin can access this route"));
+        if (!/^admin$/i.test(user.role)) {
+            return next(new responseHandler(403, "You are Not Authorize to access this route"));
         }
         next();
     } catch (error) {

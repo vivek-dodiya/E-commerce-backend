@@ -7,9 +7,13 @@ import { auth } from '../middlewares/authMiddleware.js';
 import { userProfileUpdate } from '../controllers/userControllers/userProfileUpdate.js';
 import { onlyAdminAccess } from '../middlewares/onlyAdminAccess.js';
 import { userLogout } from '../controllers/userControllers/userLogout.js';
+import { userDelete } from '../controllers/userControllers/userDelete.js';
+import { getAllUsers } from '../controllers/userControllers/getAllUsers.js';
 
 userRoutes.post('/register', userRegister);
+userRoutes.get('/allusers', auth, onlyAdminAccess, getAllUsers);
 userRoutes.post('/login', userLogin);
-userRoutes.post('/logout', auth , userLogout);
-userRoutes.post('/verify-otp',verifyOTP);
-userRoutes.put('/profile-update', auth , userProfileUpdate);
+userRoutes.post('/verify-otp', verifyOTP);
+userRoutes.put('/profile-update', auth, userProfileUpdate);
+userRoutes.post('/logout', auth, userLogout);
+userRoutes.delete('/delete', auth, userDelete);
