@@ -29,8 +29,11 @@ export const cancleOrder = catchAsyncErrors(async (req, res, next) => {
         await User.findByIdAndUpdate(
             userId,
             {
-                $pull: { order: order._id },
-                $push:{ cancledOrder : order._id}
+                $pull: {
+                    order: order._id,
+                    purchasedProduct: order.orderItems[0].product._id
+                },
+                $push: { cancledOrder: order._id }
             },
             { new: true }
         );

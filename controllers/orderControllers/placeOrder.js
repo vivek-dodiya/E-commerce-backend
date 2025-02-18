@@ -39,7 +39,7 @@ export const placeOrder = catchAsyncErrors(async (req, res, next) => {
             totalAmount
         });
         await user.updateOne({
-            $push: {
+            $addToSet: {
                 purchasedProduct: product._id,
                 order: order._id
             }
