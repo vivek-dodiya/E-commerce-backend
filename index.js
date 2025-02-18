@@ -13,6 +13,7 @@ import { connection } from './config/dbConnection.js';
 import { userRoutes } from './routes/userRoutes.js';
 import { deleteUnverifiedAccounts } from './cronJob/deleteUserCronJob.js';
 import { productRoutes } from './routes/productRoutes.js';
+import { orderRoutes } from './routes/orderRoutes.js';
 
 deleteUnverifiedAccounts()
 try {
@@ -40,6 +41,7 @@ app.use(cors({
 // Routes 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/product', productRoutes)
+app.use('/api/v1/order', orderRoutes)
 
 app.use((err, req, res, next) => {
     res.status(err.statusCode).json({

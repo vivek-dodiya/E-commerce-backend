@@ -51,6 +51,18 @@ const userSchema = new mongoose.Schema({
             ref: 'Product'
         }
     ],
+    order: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order'
+        }
+    ],
+    cancledOrder: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order'
+        }
+    ],
     createdProducts: [
         {
             type: mongoose.Schema.Types.ObjectId,
